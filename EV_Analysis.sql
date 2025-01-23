@@ -199,10 +199,6 @@ FROM (SELECT City, COUNT(*)
         GROUP BY City
         HAVING Count(*) < 10) AS `Charging Station Counter`;
 
--- Test Code
-SELECT * 
-FROM dataev.alt_fuel_stations;
-
 
 
 
