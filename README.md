@@ -69,21 +69,19 @@ This project examines electric vehicle (EV) adoption and charging station trends
 ## Datasets
 ### Electric Vehicle Dataset
 Details on EVs in Washington State:
-- **Columns**: State, Model Year, Make, EV Type, Electric Range, Base MSRP, Legislative District, CAFV Eligibility.
+- **Columns**: State, City, Model Year, Brand, EV Type, Electric Range, Base MSRP, Legislative District, CAFV Eligibility.
 
 ### Charging Station Dataset
 Details of EV charging stations in Washington:
-- **Columns**: City, Station Name, Charger Type, Number of Chargers, Installation Year.
+- **Columns**: City, Station Name, Number of Chargers, Installation Year.
 
 ---
 
 ## Tools and Techniques
 - **SQL**:
-  - Data cleaning (handling missing values and filtering incomplete data).
+  - Data cleaning (handling missing values and filtering incomplete data. dropping column, name and value changes).
   - Aggregation, joins, and CTEs for detailed analysis.
   - Window functions for advanced insights.
-- **Tableau**:
-  - Created interactive dashboards to visualize insights.
 
 ---
 
@@ -113,43 +111,9 @@ Details of EV charging stations in Washington:
 
 ---
 
-## Visualizations
-The following dashboards were created in Tableau:
-1. **EV Trends Dashboard**:
-   - Yearly EV manufacturing trends.
-   - Brand popularity and CAFV eligibility comparisons.
-2. **Charging Station Dashboard**:
-   - Growth trends and city-wise distribution.
-   - Comparison between EV adoption and charging infrastructure.
-
-### [View Tableau Dashboards](#)
-
----
-
-## Repository Layout
-```
-EV-Analysis-Washington/
-├── SQL-Scripts/
-│   ├── data_cleaning.sql
-│   ├── analysis_queries.sql
-│   ├── insights_queries.sql
-├── Tableau-Dashboards/
-│   ├── EV_Analysis.twbx
-│   └── Dashboard_Screenshots/
-│       ├── trends_dashboard.png
-│       ├── stations_dashboard.png
-├── Data/
-│   ├── Cleaned_EV_Data.csv
-│   ├── Cleaned_Charging_Station_Data.csv
-├── README.md
-```
-
----
-
 ## How to Use
 1. Clone the repository.
 2. Review the SQL scripts for data analysis steps.
-3. Access the Tableau workbooks to explore visualizations.
 
 ---
 
