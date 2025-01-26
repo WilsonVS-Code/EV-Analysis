@@ -60,7 +60,6 @@ SET `Charging Station Open Year` = CASE
        END;
 
 
-
 # Basic Level Analysis
 -- Top 5 Cars Manufacture for EVs
 SELECT BRAND, COUNT(*) AS `Number of Cars Manufactured`
@@ -78,17 +77,17 @@ FROM dataev.electric_vehicle_population_data
 GROUP BY `Electric Vehicle Type`;
 
 -- Top 5 Average Electric Range as per Brand and Model 
-SELECT Brand, AVG(`Electric Range`), Model
+SELECT Brand, AVG(`Electric Range (Miles)`) AS `Average Electric Range`, Model
 FROM dataev.electric_vehicle_population_data
 GROUP BY Brand, Model
-ORDER BY AVG(`Electric Range`) DESC
+ORDER BY AVG(`Electric Range (Miles)`) DESC
 LIMIT 5;
 
 -- Top 5 Brands with most sustainable Electric Range (Choosing the maximum electric range from each brand)
-SELECT Brand, MAX(`Electric Range`)
+SELECT Brand, MAX(`Electric Range (Miles)`) AS `Max Electric Range`
 FROM dataev.electric_vehicle_population_data
 GROUP BY Brand
-ORDER BY MAX(`Electric Range`) DESC
+ORDER BY MAX(`Electric Range (Miles)`) DESC
 LIMIT 5; 
 
 # Intermediate Level Analysis
@@ -102,10 +101,10 @@ GROUP BY `Year of Manufacture`
 ORDER BY `Year of Manufacture` ASC;
 
 -- Top 5 Average Electric Range as per Brand and Model 
-SELECT Brand, MAX(`Electric Range`) AS `Max Electric Range`, Model
+SELECT Brand, MAX(`Electric Range (Miles)`) AS `Max Electric Range`, Model
 FROM dataev.electric_vehicle_population_data
 GROUP BY Brand, Model
-ORDER BY MAX(`Electric Range`) DESC
+ORDER BY MAX(`Electric Range (Miles)`) DESC
 LIMIT 5;
 
 -- Percentage of Vehicles eligible for CAFV Program 
@@ -122,26 +121,25 @@ LIMIT 5;
 
 
 # Advanced Level Analysis 
-
 -- Electric Range Ranking by Manufacturer over the years 
-SELECT DISTINCT ev.`year of Manufacture`, ev.Brand, ev.Model, ev.`Electric Range`
+SELECT DISTINCT ev.`Year of Manufacture`, ev.Brand, ev.Model, ev.`Electric Range (Miles)`
 FROM dataev.electric_vehicle_population_data ev 
 JOIN (
-    SELECT `Year of Manufacture`, MAX(`Electric Range`) AS MaxRange
+    SELECT `Year of Manufacture`, MAX(`Electric Range (Miles)`) AS MaxRange
     FROM dataev.electric_vehicle_population_data
     GROUP BY `Year of Manufacture`
 ) AS MaxRanges
 ON ev.`Year of Manufacture` = MaxRanges.`Year of Manufacture`
-   AND ev.`Electric Range` = MaxRanges.MaxRange
+   AND ev.`Electric Range (Miles)` = MaxRanges.MaxRange
 ORDER BY ev.`Year of Manufacture` ASC;
 
 -- Identifying the number of EVS being manufactured by each manufacturer over the years
-SELECT Brand, `Year of Manufacture`, Count(*)
+SELECT Brand, `Year of Manufacture`, Count(*) AS `Number of EV Manufactured`
 FROM dataev.electric_vehicle_population_data
 GROUP BY `Year of Manufacture`, Brand
 ORDER BY `Year of Manufacture` ,Brand;
 
--- Identifying the proportion of cars from each brand that is eligible for the CAFV Program 
+-- Identifying the proportion of EV Models from each brand that is eligible for the CAFV Program 
 SELECT Brand, 
 COUNT(DISTINCT CASE WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible' THEN Model END) as Eligible_Models,
 COUNT(DISTINCT Model) AS Total_Models,
@@ -150,21 +148,71 @@ FROM dataev.electric_vehicle_population_data
 GROUP BY Brand
 ORDER BY ProportionEligible DESC, Eligible_Models DESC;
 
-
--- Only 3280 rows of data have price
-SELECT COUNT(*)
-FROM dataev.electric_vehicle_population_data
-WHERE `Base MSRP` != 0;
-
--- only 92676 rows of data have Electric Range not equals to zero
-SELECT COUNT(*)
-FROM dataev.electric_vehicle_population_data
-WHERE `Electric Range (Miles)` != 0;
-
-
 SELECT *
+FROM dataev.electric_vehicle_population_data;
+
+-- Identifying number of EVs that gets the CAFV Program from each manufacturing year 
+SELECT `Year of Manufacture`, COUNT(*) AS `Number of EVs Manufactured Each Year`, 
+COUNT(CASE WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible' 
+              THEN 1 
+          END) AS EligibleEVs,
+    ROUND(
+        COUNT(CASE 
+                  WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible' 
+                  THEN 1 
+              END) * 100.0 / COUNT(*), 2
+    ) AS PercentageEligible,
+	ROUND(
+        COUNT(CASE 
+                  WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Unknown due to lack of research' 
+                  THEN 1 
+              END) * 100.0 / COUNT(*), 2
+    ) AS PercentageUnknown, 
+    	ROUND(
+        COUNT(CASE 
+                  WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Not eligible due to low battery range' 
+                  THEN 1 
+              END) * 100.0 / COUNT(*), 2
+    ) AS PercentageIneligible
 FROM dataev.electric_vehicle_population_data
-WHERE `Base MSRP` != 0;
+GROUP BY `Year of Manufacture`
+ORDER BY `Year of Manufacture` ASC;
+
+
+-- Identify the number of cars with base MSRP = 0 based on the brand.
+SELECT Brand, 
+COUNT(CASE WHEN `BASE MSRP` = 0
+              THEN 1 
+          END) AS PriceUnknown,
+COUNT(CASE WHEN `BASE MSRP` != 0
+              THEN 1 
+          END) AS PriceKnown
+FROM dataev.electric_vehicle_population_data
+GROUP BY Brand;
+
+-- BEV Vs PHEV (CAFV Program)
+SELECT `Electric Vehicle Type`, COUNT(*) AS `Number of EVs`,
+COUNT(CASE WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible' 
+              THEN 1 
+          END) AS EligibleEVs,
+    ROUND(
+        COUNT(CASE 
+                  WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible' 
+                  THEN 1 
+              END) * 100.0 / COUNT(*), 2
+    ) AS PercentageEligible
+FROM dataev.electric_vehicle_population_data
+GROUP BY `Electric Vehicle Type`;
+
+-- Check if Electric Range influences the eligibility of thre CAFV Program 
+SELECT MIN(`Electric Range (Miles)`)
+FROM dataev.electric_vehicle_population_data
+WHERE `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible';
+
+SELECT MAX(`Electric Range (Miles)`)
+FROM dataev.electric_vehicle_population_data
+WHERE `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Not eligible due to low battery range';
+
 
 -- Analysis on the EV Charging Station in the State of Washington
 SELECT * 
@@ -198,8 +246,6 @@ FROM (SELECT City, COUNT(*)
 		FROM dataev.alt_fuel_stations
         GROUP BY City
         HAVING Count(*) < 10) AS `Charging Station Counter`;
-
-
 
 
 
