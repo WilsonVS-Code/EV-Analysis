@@ -53,7 +53,110 @@ Details of EV charging stations in Washington:
 3. **Top Cities**:
    - Seattle leads with 652 stations, followed by Bellevue with 276.
 
+### Conclusion 
+# Washington State EV and Charging Station Analysis
 
+## Overview
+This project examines electric vehicle (EV) adoption and charging station trends in Washington State using SQL for data analysis and Tableau for visualization.
+
+### Objective
+- Analyze EV adoption trends and CAFV program eligibility.
+- Study the distribution and growth of EV charging stations across the state.
+- Derive actionable insights to inform EV policy and infrastructure development.
+
+---
+
+## Datasets
+### Electric Vehicle Dataset
+Details on EVs in Washington State:
+- **Columns**: State, Model Year, Make, EV Type, Electric Range, Base MSRP, Legislative District, CAFV Eligibility.
+
+### Charging Station Dataset
+Details of EV charging stations in Washington:
+- **Columns**: City, Station Name, Charger Type, Number of Chargers, Installation Year.
+
+---
+
+## Tools and Techniques
+- **SQL**:
+  - Data cleaning (handling missing values and filtering incomplete data).
+  - Aggregation, joins, and CTEs for detailed analysis.
+  - Window functions for advanced insights.
+- **Tableau**:
+  - Created interactive dashboards to visualize insights.
+
+---
+
+## Key Insights
+### Electric Vehicle Analysis
+1. **CAFV Program Eligibility**:
+   - Only 32.24% of EVs are eligible for the CAFV program.
+   - 57.82% have unknown eligibility, emphasizing the need for better data collection.
+2. **Manufacturing Trends**:
+   - EV manufacturing has shown an upward trend since 1999.
+3. **Brand Popularity**:
+   - Tesla leads the market with 95,150 vehicles.
+4. **EV Type Comparison**:
+   - BEVs dominate over PHEVs, but PHEVs have higher CAFV eligibility (52.45% vs. 26.91%).
+5. **Eligibility Criteria**:
+   - Only EVs with a minimum electric range of 30 miles are CAFV-eligible.
+6. **Eligibility Decline (2020-2021)**:
+   - Sharp drop in CAFV eligibility from 87.66% to 11.65%, likely due to incomplete data or policy changes.
+
+### Charging Station Analysis
+1. **Growth Trends**:
+   - Steady increase in charging station installations over the years.
+2. **City Coverage**:
+   - 223 out of 281 cities have charging stations, but 176 have fewer than 10 stations.
+3. **Top Cities**:
+   - Seattle leads with 652 stations, followed by Bellevue with 276.
+
+---
+
+## Visualizations
+The following dashboards were created in Tableau:
+1. **EV Trends Dashboard**:
+   - Yearly EV manufacturing trends.
+   - Brand popularity and CAFV eligibility comparisons.
+2. **Charging Station Dashboard**:
+   - Growth trends and city-wise distribution.
+   - Comparison between EV adoption and charging infrastructure.
+
+### [View Tableau Dashboards](#)
+
+---
+
+## Repository Layout
+```
+EV-Analysis-Washington/
+├── SQL-Scripts/
+│   ├── data_cleaning.sql
+│   ├── analysis_queries.sql
+│   ├── insights_queries.sql
+├── Tableau-Dashboards/
+│   ├── EV_Analysis.twbx
+│   └── Dashboard_Screenshots/
+│       ├── trends_dashboard.png
+│       ├── stations_dashboard.png
+├── Data/
+│   ├── Cleaned_EV_Data.csv
+│   ├── Cleaned_Charging_Station_Data.csv
+├── README.md
+```
+
+---
+
+## How to Use
+1. Clone the repository.
+2. Review the SQL scripts for data analysis steps.
+3. Access the Tableau workbooks to explore visualizations.
+
+---
+
+## Conclusion
+This analysis sheds light on the current state and trends of EV adoption and charging infrastructure in Washington State. By exploring the eligibility for the CAFV program, the dominance of specific EV types, and the growth of charging stations, stakeholders can better understand the challenges and opportunities in the EV market. Policymakers can leverage these insights to address gaps in charging infrastructure, improve eligibility transparency, and encourage broader EV adoption. For businesses and EV manufacturers, these findings provide data-driven guidance on market trends, popular brands, and potential areas for growth. Ultimately, this project highlights the importance of data in driving sustainable transportation initiatives and supporting the transition to a greener future.
+
+---
 
 ## Contact
 Have questions or feedback? Connect with me:
