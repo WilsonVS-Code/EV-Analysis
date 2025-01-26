@@ -204,7 +204,7 @@ COUNT(CASE WHEN `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alt
 FROM dataev.electric_vehicle_population_data
 GROUP BY `Electric Vehicle Type`;
 
--- Check if Electric Range influences the eligibility of thre CAFV Program 
+-- Check if Electric Range influences the eligibility receiving the CAFV Program 
 SELECT MIN(`Electric Range (Miles)`)
 FROM dataev.electric_vehicle_population_data
 WHERE `Clean Alternative Fuel Vehicle (CAFV) Eligibility` = 'Clean Alternative Fuel Vehicle Eligible';
